@@ -1,4 +1,7 @@
 import React from "react";
+import { TiWeatherPartlySunny } from "react-icons/ti";
+import { CiLocationOn } from "react-icons/ci";
+import { RiUserLocationLine } from "react-icons/ri";
 
 type Props = {};
 
@@ -8,7 +11,14 @@ export default function Navbar({}: Props) {
       <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
         <p className="flex items-center justify-center gap-2">
           <h2 className="text-gray-500 text-3xl">Weather</h2>
+          <TiWeatherPartlySunny className="text-3xl mt-1 text-gray-600" />
         </p>
+        <section className="flex gap-2 items-center">
+          <CiLocationOn className="text-2xl text-black hover:opacity-75 cursor-pointer" />
+          <RiUserLocationLine className="text-3xl text-black hover:opacity-75 cursor-pointer" />
+          <p className="text-slate-900/80 text-sm"> Sidcup </p>
+          <div>{/* Searchbox  */}</div>
+        </section>
       </div>
     </nav>
   );
