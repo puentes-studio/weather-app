@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format, parseISO } from "date-fns";
 import axios from "axios";
 import Container from "@/components/Container";
+import { ToCelsius } from "@/utils/convertToCelcius";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
 // https://api.openweathermap.org/data/2.5/forecast?q=london&appid=1ea77c597e499c75c3a836e711a8b663&cnt=56
@@ -101,7 +102,17 @@ export default function Home() {
                 ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
               </p>
             </h2>
-            <Container></Container>
+            <Container className="gap-10 px-6 items-center">
+              <div className="flex flex-col px-4">
+                <span className="text-5xl">
+                  {ToCelsius(firstData?.main.temp ?? 296.37)}º
+                </span>
+                <p className="text-xs space-x-1 whitespace-nowrap">
+                  <span> Feels like </span>
+                  <span>{ToCelsius(firstData?.main.feels_like ?? 0)}º</span>
+                </p>
+              </div>
+            </Container>
           </div>
         </section>
 
