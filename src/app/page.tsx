@@ -76,7 +76,12 @@ export default function Home() {
 
   console.log("data", data?.city.country);
 
-  if (isPending) return <p>Loading...</p>; // ✅ Fixed JSX
+  if (isPending)
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="animate-bounce text-blue-500">Loading...</p>
+      </div>
+    ); // ✅ Fixed JSX
   if (error) return <p>An error occurred: {error.message}</p>; // ✅ Fixed JSX
 
   return (
