@@ -1,4 +1,8 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
 // https://api.openweathermap.org/data/2.5/forecast?q=london&appid=1ea77c597e499c75c3a836e711a8b663&cnt=56
@@ -57,6 +61,24 @@ interface WeatherDetail {
 }
 
 export default function Home() {
+  const { isPending, error, data } = useQuery<WeatherData>({
+    queryKey: ["repoData"],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        `https://api.openweathermap.org/data/2.5/forecast?q=london&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
+      );
+      return data;
+    },
+    // fetch('https://api.openweathermap.org/data/2.5/forecast?q=london&appid=1ea77c597e499c75c3a836e711a8b663&cnt=56').then((res) =>
+    //   res.json(),
+    // ),
+  });
+
+  console.log("data", data?.city.country);
+
+  if (isPending) return <p>Loading...</p>; // ✅ Fixed JSX
+  if (error) return <p>An error occurred: {error.message}</p>; // ✅ Fixed JSX
+
   return (
     <div className="flex flex-col gap-4 bg-gray-100 min-h-screen">
       <Navbar />
