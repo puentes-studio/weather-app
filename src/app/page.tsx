@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { useQuery } from "@tanstack/react-query";
+import { format, parseISO } from "date-fns";
 import axios from "axios";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
@@ -74,6 +75,8 @@ export default function Home() {
     // ),
   });
 
+  const firstData = data?.list[0];
+
   console.log("data", data?.city.country);
 
   if (isPending)
@@ -87,6 +90,23 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-4 bg-gray-100 min-h-screen">
       <Navbar />
+      <main className="px-3 max-w-7xl mx-auto flex flex-col gap-9 w-full pb-10 pt-4">
+        {/* Today data */}
+        <section>
+          <div>
+            <h2 className="flex items-end gap-1 text-2xl">
+              <p>{format(parseISO(firstData?.dt_txt ?? ""), "EEEE")}</p>
+              <p className="text-lg">
+                ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
+              </p>
+            </h2>
+            <div></div>
+          </div>
+        </section>
+
+        {/* 7 day forecast data */}
+        <section></section>
+      </main>
     </div>
   );
 }
