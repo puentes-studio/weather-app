@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { useQuery } from "@tanstack/react-query";
 import { format, parseISO } from "date-fns";
 import axios from "axios";
+import Container from "@/components/Container";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
 // https://api.openweathermap.org/data/2.5/forecast?q=london&appid=1ea77c597e499c75c3a836e711a8b663&cnt=56
@@ -100,7 +101,7 @@ export default function Home() {
                 ({format(parseISO(firstData?.dt_txt ?? ""), "dd.MM.yyyy")})
               </p>
             </h2>
-            <div></div>
+            <Container></Container>
           </div>
         </section>
 
