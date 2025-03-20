@@ -111,6 +111,10 @@ export default function Home() {
                   <span> Feels like </span>
                   <span>{ToCelsius(firstData?.main.feels_like ?? 0)}º</span>
                 </p>
+                <p className="text-xs space-x-2">
+                  <span>{ToCelsius(firstData?.main.temp_min ?? 0)} º↓ </span>
+                  <span> {ToCelsius(firstData?.main.temp_max ?? 0)} º↑ </span>
+                </p>
               </div>
             </Container>
           </div>
