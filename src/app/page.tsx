@@ -7,6 +7,7 @@ import axios from "axios";
 import Container from "@/components/Container";
 import { ToCelsius } from "@/utils/convertToCelcius";
 import WeatherIcon from "@/components/WeatherIcon";
+import { getDayOrNight } from "@/utils/dayOrNight";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
 // https://api.openweathermap.org/data/2.5/forecast?q=london&appid=1ea77c597e499c75c3a836e711a8b663&cnt=56
@@ -129,7 +130,11 @@ export default function Home() {
                       {format(parseISO(d.dt_txt), "h:mm a")}
                     </p>
 
-                    <WeatherIcon iconName={d.weather[0].icon} />
+                    {/* <WeatherIcon iconName={d.weather[0].icon} /> */}
+                    <WeatherIcon
+                      iconName={getDayOrNight(d.weather[0].icon, d.dt_txt)}
+                    />
+
                     <p>{ToCelsius(d?.main.temp ?? 296.37)}º</p>
                   </div>
                 ))}
