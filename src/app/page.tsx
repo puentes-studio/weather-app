@@ -8,9 +8,10 @@ import Container from "@/components/Container";
 import { ToCelsius } from "@/utils/convertToCelcius";
 import WeatherIcon from "@/components/WeatherIcon";
 import { getDayOrNight } from "@/utils/dayOrNight";
+import WeatherDetails from "@/components/WeatherDetails";
+import { metersToKilomenters } from "@/utils/metersToKilometers";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
-// https://api.openweathermap.org/data/2.5/forecast?q=london&appid=1ea77c597e499c75c3a836e711a8b663&cnt=56
 
 interface WeatherData {
   cod: string;
@@ -81,7 +82,7 @@ export default function Home() {
 
   const firstData = data?.list[0];
 
-  console.log("data", data?.city.country);
+  console.log("data");
 
   if (isPending)
     return (
@@ -153,7 +154,18 @@ export default function Home() {
               />
             </Container>
             {/* right */}
-            <Container></Container>
+            <Container className="bg-yellow-300/80 px-6 gap-4 justify-between overflow-x-auto">
+              <WeatherDetails
+                visibility={metersToKilomenters(firstData?.visibility ?? 10000)}
+                airPressure={`${firstData?.main.pressure} hPa`}
+                humidity={`${firstData?.main.humidity}%`}
+                sunrise={format(
+                  parseISO(firstData?.sys.sunrise * 1000),
+                  "HH:mm"
+                )}
+                windSpeed={`${firstData?.wind.speed} km/h`}
+              />
+            </Container>
           </div>
         </section>
 
