@@ -52,7 +52,7 @@ export default function WeatherDetails(props: WeatherDetailsProps) {
       />
       <SingleWeatherDetails
         icon={<LuSunset />}
-        information="Sunser"
+        information="Sunset"
         value={props.sunset}
       />
     </>
@@ -67,7 +67,7 @@ export interface SingleWeatherDetailsProps {
 
 function SingleWeatherDetails(props: SingleWeatherDetailsProps) {
   return (
-    <div className="flex flex-col justify-between gap-2 items-center text-xs font-semibold text-black/80">
+    <div className="flex flex-col justify-between gap-2 items-center text-xs font-semibold text-black/80 px-2">
       <p className="whitespace-nowrap">{props.information}</p>
       <div className="text-3xl">{props.icon}</div>
       <p>{props.value}</p>
