@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { useQuery } from "@tanstack/react-query";
-import { format, parseISO } from "date-fns";
+import { format, fromUnixTime, parseISO } from "date-fns";
 import axios from "axios";
 import Container from "@/components/Container";
 import { ToCelsius } from "@/utils/convertToCelcius";
@@ -10,6 +10,7 @@ import WeatherIcon from "@/components/WeatherIcon";
 import { getDayOrNight } from "@/utils/dayOrNight";
 import WeatherDetails from "@/components/WeatherDetails";
 import { metersToKilomenters } from "@/utils/metersToKilometers";
+import { ConvertWindSpeed } from "@/utils/convertWindSpeed";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
 
@@ -160,10 +161,14 @@ export default function Home() {
                 airPressure={`${firstData?.main.pressure} hPa`}
                 humidity={`${firstData?.main.humidity}%`}
                 sunrise={format(
-                  parseISO(firstData?.sys.sunrise * 1000),
-                  "HH:mm"
+                  fromUnixTime(data?.city.sunrise ?? 1702949452),
+                  "H:mm"
                 )}
-                windSpeed={`${firstData?.wind.speed} km/h`}
+                sunset={format(
+                  fromUnixTime(data?.city.sunset ?? 1702949452),
+                  "H:mm"
+                )}
+                windSpeed={ConvertWindSpeed(firstData?.wind.speed ?? 1.64)}
               />
             </Container>
           </div>
