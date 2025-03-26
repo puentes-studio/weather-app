@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { useQuery } from "@tanstack/react-query";
-import { format, fromUnixTime, parseISO } from "date-fns";
+import { format, formatDate, fromUnixTime, parseISO } from "date-fns";
 import axios from "axios";
 import Container from "@/components/Container";
 import { ToCelsius } from "@/utils/convertToCelcius";
@@ -84,7 +84,23 @@ export default function Home() {
 
   const firstData = data?.list[0];
 
-  console.log("data");
+  console.log("data", data);
+
+  const uniqueDates = [
+    ...new Set(
+      data?.list.map(
+        (entry) => new Date(entry.dt * 1000).toISOString().split("T")[0]
+      )
+    ),
+  ];
+
+  const firstDataForEachEntry = uniqueDates.map((date) => {
+    return data?.list.find((entry) => {
+      const entryDate = new Date(entry.dt * 1000).toISOString().split("T")[0];
+      const entryTime = new Date(entry.dt * 1000).getHours();
+      return entryDate === date && entryTime >= 6;
+    });
+  });
 
   if (isPending)
     return (
@@ -178,7 +194,32 @@ export default function Home() {
         {/* 7 day forecast data */}
         <section className="flex flex-col gap-4 w-full ">
           <p className="text-2xl">Seven Day Forecast</p>
-          <ForecastDetail />
+          {firstDataForEachEntry.map((d, i) => (
+            <ForecastDetail
+              key={i}
+              description={d?.weather[0].description ?? ""}
+              weatherIcon={d?.weather[0].icon ?? "01d"}
+              date={formatDate(parseISO(d?.dt_txt ?? ""), "dd.MM")}
+              day={formatDate(parseISO(d?.dt_txt ?? ""), "EEEE")}
+              feelsLike={d?.main.feels_like ?? 0}
+              temp={d?.main.temp ?? 0}
+              temp_min={d?.main.temp_min ?? 0}
+              temp_max={d?.main.temp_max ?? 0}
+              airPressure={`${d?.main.pressure ?? 0} hPa`}
+              humidity={`${d?.main.humidity ?? 0}%`}
+              windSpeed={ConvertWindSpeed(d?.wind.speed ?? 0)}
+              // windDirection={getWindDirection(d?.wind.deg?? 0)}
+              visibility={metersToKilomenters(d?.visibility ?? 0)}
+              sunrise={format(
+                fromUnixTime(data?.city.sunrise ?? 1702949452),
+                "H:mm"
+              )}
+              sunset={format(
+                fromUnixTime(data?.city.sunset ?? 1702949452),
+                "H:mm"
+              )}
+            />
+          ))}
         </section>
       </main>
     </div>

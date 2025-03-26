@@ -21,7 +21,7 @@ export default function ForecastDetail(props: ForecastWeatherDetailsProps) {
       {/* left */}
       <section className="flex gap-4 items-center px-4">
         <div>
-          <WeatherIcon iconName={WeatherIcon} />
+          <WeatherIcon iconName={props.weatherIcon} />
           <p>{props.date}</p>
           <p className="text-sm">{props.day}</p>
         </div>
