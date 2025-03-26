@@ -27,10 +27,10 @@ export default function ForecastDetail(props: ForecastWeatherDetailsProps) {
         </div>
 
         <div className="flex flex-col px-4">
-          <span className="text-5xl">{ToCelsius(props.temp ?? 0)}º</span>
+          <span className="text-5xl">{ToCelsius(props.temp ?? 296.37)}º</span>
           <p className="text-xs space-x-1 whitespace-nowrap">
             <span>Feels like</span>
-            <span>{ToCelsius(props.temp ?? 0)}º</span>
+            <span>{ToCelsius(props.feelsLike ?? 296.37)}º</span>
           </p>
           <p className="capitalize">{props.description}</p>
         </div>
