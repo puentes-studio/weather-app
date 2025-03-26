@@ -11,6 +11,7 @@ import { getDayOrNight } from "@/utils/dayOrNight";
 import WeatherDetails from "@/components/WeatherDetails";
 import { metersToKilomenters } from "@/utils/metersToKilometers";
 import { ConvertWindSpeed } from "@/utils/convertWindSpeed";
+import ForecastDetail from "@/components/ForecastDetail";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
 
@@ -177,6 +178,7 @@ export default function Home() {
         {/* 7 day forecast data */}
         <section className="flex flex-col gap-4 w-full ">
           <p className="text-2xl">Seven Day Forecast</p>
+          <ForecastDetail />
         </section>
       </main>
     </div>
