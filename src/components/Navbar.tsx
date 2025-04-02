@@ -6,6 +6,8 @@ import { CiLocationOn } from "react-icons/ci";
 import { RiUserLocationLine } from "react-icons/ri";
 import Searchbox from "./Searchbox";
 import axios from "axios";
+import { placeAtom } from "@/app/atom";
+import { useAtom } from "jotai";
 
 type Props = {};
 
@@ -16,6 +18,7 @@ export default function Navbar({}: Props) {
   const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [place, setPlace] = useAtom(placeAtom);
 
   async function handleInputChange(value: string) {
     setCity(value);
@@ -52,13 +55,21 @@ export default function Navbar({}: Props) {
 
   function handleSubmitSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (!city.trim()) {
+      // ✅ Check if city is empty
+      setError("Please enter a location");
+      return;
+    }
+
     if (suggestions.length === 0) {
       setError("Location not found");
       return;
-    } else {
-      setError("");
-      setShowSuggestions(false);
     }
+
+    setError("");
+    setPlace(city);
+    setShowSuggestions(false);
   }
 
   return (
@@ -106,11 +117,10 @@ function SuggestionBox({
 }) {
   return (
     <>
-      {((showSuggestions && suggestions.length > 1) || error) && (
+      {(showSuggestions && suggestions.length > 0) || error ? (
         <ul className="mb-4 bg-white absolute border top-[44px] left-0 border-gray-300 rounded-md min-w-[200px] flex flex-col gap-1 py-2 px-2">
-          {error && suggestions.length > 1 && (
-            <li className="p-1 text-red-700">{error}</li>
-          )}
+          {error && <li className="p-1 text-red-700">{error}</li>}{" "}
+          {/* ✅ Always show error if exists */}
           {suggestions.map((item, i) => (
             <li
               key={i}
@@ -121,7 +131,8 @@ function SuggestionBox({
             </li>
           ))}
         </ul>
-      )}
+      ) : null}{" "}
+      {/* ✅ Hide completely when no suggestions or errors */}
     </>
   );
 }
