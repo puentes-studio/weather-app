@@ -12,6 +12,9 @@ import WeatherDetails from "@/components/WeatherDetails";
 import { metersToKilomenters } from "@/utils/metersToKilometers";
 import { ConvertWindSpeed } from "@/utils/convertWindSpeed";
 import ForecastDetail from "@/components/ForecastDetail";
+import { placeAtom } from "@/app/atom";
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 
 // https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.PUBLIC_WEATHER_KEY}&cnt=56
 
@@ -69,11 +72,13 @@ interface WeatherDetail {
 }
 
 export default function Home() {
-  const { isPending, error, data } = useQuery<WeatherData>({
+  const [place, setPlace] = useAtom(placeAtom);
+
+  const { isPending, error, data, refetch } = useQuery<WeatherData>({
     queryKey: ["repoData"],
     queryFn: async () => {
       const { data } = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=london&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
+        `https://api.openweathermap.org/data/2.5/forecast?q=${place}&appid=${process.env.NEXT_PUBLIC_WEATHER_KEY}&cnt=56`
       );
       return data;
     },
@@ -81,6 +86,10 @@ export default function Home() {
     //   res.json(),
     // ),
   });
+
+  useEffect(() => {
+    refetch();
+  }, [place, refetch]);
 
   const firstData = data?.list[0];
 
