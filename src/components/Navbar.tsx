@@ -31,7 +31,7 @@ export default function Navbar({ location }: Props) {
         );
 
         const suggestions = response.data.map(
-          (item: any) => `${item.name}, ${item.country}` // Shows "City, Country"
+          (item: any) => `${item.name}, ${item.city}` // Shows "City, Country"
         );
 
         setSuggestions(suggestions);
