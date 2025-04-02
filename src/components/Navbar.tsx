@@ -6,7 +6,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { RiUserLocationLine } from "react-icons/ri";
 import Searchbox from "./Searchbox";
 import axios from "axios";
-import { placeAtom } from "@/app/atom";
+import { loadingCityAtom, placeAtom } from "@/app/atom";
 import { useAtom } from "jotai";
 
 type Props = { location?: string };
@@ -19,6 +19,7 @@ export default function Navbar({ location }: Props) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [place, setPlace] = useAtom(placeAtom);
+  const [_, setLoadingCity] = useAtom(loadingCityAtom);
 
   async function handleInputChange(value: string) {
     setCity(value);
@@ -54,15 +55,18 @@ export default function Navbar({ location }: Props) {
   }
 
   function handleSubmitSearch(e: React.FormEvent<HTMLFormElement>) {
+    setLoadingCity(true);
     e.preventDefault();
 
     if (!city.trim()) {
       // ✅ Check if city is empty
+
       setError("Please enter a location");
       return;
     }
 
     if (suggestions.length === 0) {
+      setLoadingCity(false);
       setError("Location not found");
       return;
     }
