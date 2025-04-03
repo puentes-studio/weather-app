@@ -121,38 +121,57 @@ export default function Navbar({ location }: Props) {
   }
 
   return (
-    <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white">
-      <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
-        <div className="flex items-center justify-center gap-2">
-          <h2 className="text-gray-500 text-3xl">Weather</h2>
-          <TiWeatherPartlySunny className="text-3xl mt-1 text-gray-600" />
-        </div>
-        <section className="flex gap-2 items-center">
-          <CiLocationOn
-            title="Your location"
-            onClick={handleCurrentLocation}
-            className="text-2xl text-black hover:opacity-75 cursor-pointer"
-          />
-          <RiUserLocationLine className="text-3xl text-black hover:opacity-75 cursor-pointer" />
-          <p className="text-slate-900/80 text-sm"> {location} </p>
-          <div className="relative">
-            <Searchbox
-              value={city}
-              onSubmit={handleSubmitSearch}
-              onChange={(e) => handleInputChange(e.target.value)}
-            />
-            <SuggestionBox
-              {...{
-                suggestions,
-                showSuggestions,
-                handleSuggestionsClick,
-                error,
-              }}
-            />
+    <>
+      <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white">
+        <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
+          <div className="flex items-center justify-center gap-2">
+            <h2 className="text-gray-500 text-3xl">Weather</h2>
+            <TiWeatherPartlySunny className="text-3xl mt-1 text-gray-600" />
           </div>
-        </section>
-      </div>
-    </nav>
+          <section className="flex gap-2 items-center">
+            <CiLocationOn
+              title="Your location"
+              onClick={handleCurrentLocation}
+              className="text-2xl text-black hover:opacity-75 cursor-pointer"
+            />
+            <RiUserLocationLine className="text-3xl text-black hover:opacity-75 cursor-pointer" />
+            <p className="text-slate-900/80 text-sm"> {location} </p>
+            <div className="relative hidden md:flex">
+              <Searchbox
+                value={city}
+                onSubmit={handleSubmitSearch}
+                onChange={(e) => handleInputChange(e.target.value)}
+              />
+              <SuggestionBox
+                {...{
+                  suggestions,
+                  showSuggestions,
+                  handleSuggestionsClick,
+                  error,
+                }}
+              />
+            </div>
+          </section>
+        </div>
+      </nav>
+      <section className="flex max-w-7xl px-3 md:hidden">
+        <div className="relative">
+          <Searchbox
+            value={city}
+            onSubmit={handleSubmitSearch}
+            onChange={(e) => handleInputChange(e.target.value)}
+          />
+          <SuggestionBox
+            {...{
+              suggestions,
+              showSuggestions,
+              handleSuggestionsClick,
+              error,
+            }}
+          />
+        </div>
+      </section>
+    </>
   );
 }
 
