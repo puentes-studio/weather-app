@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { TiWeatherPartlySunny } from "react-icons/ti";
+// import { TiWeatherPartlySunny } from "react-icons/ti";
 import { CiLocationOn } from "react-icons/ci";
 import { RiUserLocationLine } from "react-icons/ri";
 import Searchbox from "./Searchbox";
 import axios from "axios";
 import { loadingCityAtom, placeAtom } from "@/app/atom";
 import { useAtom } from "jotai";
+import Image from "next/image";
 
 type Props = { location?: string };
 
@@ -125,8 +126,17 @@ export default function Navbar({ location }: Props) {
       <nav className="shadow-sm sticky top-0 left-0 z-50 bg-white">
         <div className="h-[80px] w-full flex justify-between items-center max-w-7xl px-3 mx-auto">
           <div className="flex items-center justify-center gap-2">
-            <h2 className="text-gray-500 text-3xl">Weather</h2>
-            <TiWeatherPartlySunny className="text-3xl mt-1 text-gray-600" />
+            <div className="w-16 h-16 relative">
+              <Image
+                src="/logo.png"
+                alt="Weather Logo"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+            <h2 className="text-gray-500 text-1xl">Weather</h2>
+
+            {/* <TiWeatherPartlySunny className="text-3xl mt-1 text-gray-600" /> */}
           </div>
           <section className="flex gap-2 items-center">
             <CiLocationOn
