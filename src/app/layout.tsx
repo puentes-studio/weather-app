@@ -5,7 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import {
   QueryClient,
   QueryClientProvider,
-  useQuery,
+  // useQuery,
 } from "@tanstack/react-query";
 import "./globals.css";
 

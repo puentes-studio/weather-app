@@ -9,6 +9,7 @@ import axios from "axios";
 import { loadingCityAtom, placeAtom } from "@/app/atom";
 import { useAtom } from "jotai";
 import Image from "next/image";
+import { AxiosError } from "axios";
 
 type Props = { location?: string };
 
@@ -19,8 +20,8 @@ export default function Navbar({ location }: Props) {
   const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [place, setPlace] = useAtom(placeAtom);
-  const [_, setLoadingCity] = useAtom(loadingCityAtom);
+  const [, setPlace] = useAtom(placeAtom);
+  const [, setLoadingCity] = useAtom(loadingCityAtom);
 
   async function handleInputChange(value: string) {
     setCity(value);
@@ -32,16 +33,25 @@ export default function Navbar({ location }: Props) {
         );
 
         const suggestions = response.data.map(
-          (item: any) => `${item.name}, ${item.country}` // Shows "City, Country"
+          (item: { name: string; country: string }) =>
+            `${item.name}, ${item.country}`
         );
 
         setSuggestions(suggestions);
         setShowSuggestions(suggestions.length > 0);
         setError(suggestions.length === 0 ? "No matching locations found" : "");
-      } catch (error) {
-        setSuggestions([]);
-        setShowSuggestions(false);
-        setError("Failed to fetch location data");
+      } catch (error: unknown) {
+        // Type checking for 'error'
+        if (error instanceof AxiosError) {
+          setSuggestions([]);
+          setShowSuggestions(false);
+          setError("Failed to fetch location data");
+        } else {
+          // If the error is not an AxiosError, handle it differently (or log it)
+          setSuggestions([]);
+          setShowSuggestions(false);
+          setError("An unexpected error occurred");
+        }
       }
     } else {
       setSuggestions([]);
