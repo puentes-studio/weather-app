@@ -31,7 +31,7 @@ export default function Navbar({ location }: Props) {
         );
 
         const suggestions = response.data.map(
-          (item: any) => `${item.name}, ${item.city}` // Shows "City, Country"
+          (item: any) => `${item.name}, ${item.country}` // Shows "City, Country"
         );
 
         setSuggestions(suggestions);
@@ -72,8 +72,52 @@ export default function Navbar({ location }: Props) {
     }
 
     setError("");
-    setPlace(city);
-    setShowSuggestions(false);
+    setTimeout(() => {
+      setPlace(city);
+      setLoadingCity(false);
+      setShowSuggestions(false);
+    }, 500);
+  }
+
+  function handleCurrentLocation() {
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude: lat, longitude: lon } = position.coords; // ✅ Corrected lat/lon extraction
+
+        try {
+          setLoadingCity(true);
+          const response = await axios.get(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+          );
+
+          console.log("Location Response:", response.data); // ✅ Debugging
+
+          if (response.data?.name) {
+            setTimeout(() => {
+              setPlace(response.data.name);
+              setLoadingCity(false);
+            }, 500);
+          } else {
+            throw new Error("No location name found in API response.");
+          }
+        } catch (error) {
+          console.error("Error fetching location:", error);
+          setLoadingCity(false);
+          setError("Failed to fetch location data.");
+        }
+      },
+      (error) => {
+        console.error("Geolocation Error:", error);
+        setError(
+          "Failed to get your location. Please enable location services."
+        );
+      }
+    );
   }
 
   return (
@@ -84,7 +128,11 @@ export default function Navbar({ location }: Props) {
           <TiWeatherPartlySunny className="text-3xl mt-1 text-gray-600" />
         </div>
         <section className="flex gap-2 items-center">
-          <CiLocationOn className="text-2xl text-black hover:opacity-75 cursor-pointer" />
+          <CiLocationOn
+            title="Your location"
+            onClick={handleCurrentLocation}
+            className="text-2xl text-black hover:opacity-75 cursor-pointer"
+          />
           <RiUserLocationLine className="text-3xl text-black hover:opacity-75 cursor-pointer" />
           <p className="text-slate-900/80 text-sm"> {location} </p>
           <div className="relative">
